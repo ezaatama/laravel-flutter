@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../pages/checkout_success_page.dart';
 import '../pages/checkout_page.dart';
 import '../pages/product_page.dart';
 import '../pages/edit_profile_page.dart';
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
         '/edit-profile': (context) => const EditProfilePage(),
         '/product': (context) => ProductPage(),
         '/cart': (context) => const CartPage(),
-        '/checkout': (context) => const CheckoutPage()
+        '/checkout': (context) => const CheckoutPage(),
+        '/checkout-success': (context) => const CheckoutSuccessPage()
       },
     );
   }
