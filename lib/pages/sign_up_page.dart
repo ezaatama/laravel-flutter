@@ -1,27 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../widgets/loading_button.dart';
 import '../providers/auth_provider.dart';
 
 import '../theme.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
   TextEditingController nameController = TextEditingController(text: '');
+
   TextEditingController usernameController = TextEditingController(text: '');
+
   TextEditingController emailController = TextEditingController(text: '');
+
+  TextEditingController phoneController = TextEditingController(text: '');
+
   TextEditingController passwordController = TextEditingController(text: '');
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
     handleSignUp() async {
+      setState(() {
+        isLoading = true;
+      });
+
       if (await authProvider.register(
           name: nameController.text,
           username: usernameController.text,
           email: emailController.text,
+          phone: phoneController.text,
           password: passwordController.text)) {
         Navigator.pushNamed(context, '/home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: alertColor,
+            content: const Text(
+              "Gagal Register!",
+              textAlign: TextAlign.center,
+            )));
       }
+
+      setState(() {
+        isLoading = false;
+      });
     }
 
     Widget header() {
@@ -42,7 +71,7 @@ class SignUpPage extends StatelessWidget {
 
     Widget fullNameInput() {
       return Container(
-        margin: const EdgeInsets.only(top: 70),
+        margin: const EdgeInsets.only(top: 26),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -81,7 +110,7 @@ class SignUpPage extends StatelessWidget {
 
     Widget usernameInput() {
       return Container(
-        margin: const EdgeInsets.only(top: 70),
+        margin: const EdgeInsets.only(top: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -120,7 +149,7 @@ class SignUpPage extends StatelessWidget {
 
     Widget emailInput() {
       return Container(
-        margin: const EdgeInsets.only(top: 70),
+        margin: const EdgeInsets.only(top: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -146,6 +175,46 @@ class SignUpPage extends StatelessWidget {
                       style: primaryTextStyle,
                       decoration: InputDecoration.collapsed(
                           hintText: 'Your Email Address',
+                          hintStyle: subtitleTextStyle),
+                    ))
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    Widget phoneInput() {
+      return Container(
+        margin: const EdgeInsets.only(top: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Phone Number',
+                style: primaryTextStyle.copyWith(
+                    fontSize: 16, fontWeight: medium)),
+            const SizedBox(height: 12),
+            Container(
+              height: 50,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: backgroundColor2,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: Row(
+                  children: [
+                    Image.asset('assets/icons/email_icon.png', width: 17),
+                    const SizedBox(width: 16),
+                    Expanded(
+                        child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: phoneController,
+                      style: primaryTextStyle,
+                      decoration: InputDecoration.collapsed(
+                          hintText: 'Your Phone Number',
                           hintStyle: subtitleTextStyle),
                     ))
                   ],
@@ -207,9 +276,9 @@ class SignUpPage extends StatelessWidget {
                 backgroundColor: primaryColor,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12))),
-            onPressed: () {},
+            onPressed: handleSignUp,
             child: Text(
-              'Sign In',
+              'Sign Up',
               style:
                   primaryTextStyle.copyWith(fontSize: 16, fontWeight: medium),
             )),
@@ -223,13 +292,15 @@ class SignUpPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Don\'t have an account?',
+              'Already have an account?',
               style: subtitleTextStyle.copyWith(fontSize: 12),
             ),
             GestureDetector(
-                onTap: handleSignUp,
+                onTap: () {
+                  Navigator.pushNamed(context, '/sign-in');
+                },
                 child: Text(
-                  'Sign Up',
+                  'Sign In',
                   style: purpleTextStyle.copyWith(
                       fontSize: 12, fontWeight: medium),
                 ))
@@ -250,8 +321,9 @@ class SignUpPage extends StatelessWidget {
               fullNameInput(),
               usernameInput(),
               emailInput(),
+              phoneInput(),
               passwordInput(),
-              signUpButton(),
+              isLoading ? const LoadingButton() : signUpButton(),
               const Spacer(),
               footer()
             ],

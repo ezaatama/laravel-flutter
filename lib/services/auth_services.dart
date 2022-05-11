@@ -5,22 +5,26 @@ import 'package:http/http.dart' as http;
 
 class AuthService{
   
-  String baseUrl = 'http://sepatu-backend.test/api';
+  String baseUrl = 'http://127.0.0.1:8000/api';
+  // 10.0.2.16
 
   Future<UserModel> register({
     required String name,
     required String username,
     required String email,
+    required String phone,
     required String password
-  }) async {
+  }) async { 
     var url = Uri.parse('$baseUrl/register');
     var headers = {
+      'Accept': 'application/json',
       'Content-Type': 'application/json'
     };
     var body = jsonEncode({
       'name': name,
       'username': username,
       'email': email,
+      'phone': phone,
       'password': password
     });
 
@@ -40,6 +44,39 @@ class AuthService{
       return user;
     }else{
       throw Exception('Gagal Register');
+    }
+  }
+
+  Future<UserModel> login({
+    required String email,
+    required String password
+  }) async { 
+    var url = Uri.parse('$baseUrl/login');
+    var headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    };
+    var body = jsonEncode({
+      'email': email,
+      'password': password
+    });
+
+    var response = await http.post(
+      url,
+      headers: headers,
+      body: body
+    );
+
+    print(response.body);
+
+    if(response.statusCode == 200){
+      var data = jsonDecode(response.body)['data'];
+      UserModel user = UserModel.fromJson(data['user']);
+      user.token = 'Bearer ' + data['access_token'];
+
+      return user;
+    }else{
+      throw Exception('Gagal Login');
     }
   }
 }
