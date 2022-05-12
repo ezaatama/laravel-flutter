@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../models/user_model.dart';
+import '../../providers/auth_provider.dart';
 import '../../widgets/product_card.dart';
 import '../../theme.dart';
 import '../../widgets/product_tile.dart';
@@ -8,6 +11,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
+    UserModel user = authProvider.user;
 
     Widget _header() {
       return Container(
@@ -20,12 +27,12 @@ class HomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Hello, Alex",
+                    "Hello, ${user.name}",
                     style: primaryTextStyle.copyWith(
                         fontSize: 24, fontWeight: semiBold),
                   ),
                   Text(
-                    "@alexkeinn",
+                    "@${user.username}",
                     style: subtitleTextStyle.copyWith(fontSize: 16),
                   )
                 ],
@@ -34,9 +41,9 @@ class HomePage extends StatelessWidget {
             Container(
               width: 54,
               height: 54,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                image: DecorationImage(image: AssetImage("assets/images/image_profile.png"))
+                image: DecorationImage(image: NetworkImage(user.profilePhotoUrl!))
               )
             )
           ],
