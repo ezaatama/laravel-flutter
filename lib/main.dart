@@ -11,6 +11,7 @@ import '../pages/sign_in_page.dart';
 import '../pages/splash_page.dart';
 import '../pages/cart_page.dart';
 import '../providers/auth_provider.dart';
+import '../providers/product_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => AuthProvider())
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => ProductProvider())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
