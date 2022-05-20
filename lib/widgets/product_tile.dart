@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:shamo/theme.dart';
+import '../models/product_model.dart';
+import '../pages/product_page.dart';
+import '../theme.dart';
 
 class ProductTile extends StatelessWidget {
-  const ProductTile({Key? key}) : super(key: key);
+
+  final ProductModel product; 
+  ProductTile(this.product);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.pushNamed(context, '/product');
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage(product)));
       },
       child: Container(
         margin: EdgeInsets.only(
@@ -17,8 +21,8 @@ class ProductTile extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                "assets/images/gambar_sepatu.png",
+              child: Image.network(
+                product.galleries![0].url.toString(),
                 width: 120,
                 height: 120,
                 fit: BoxFit.cover,
@@ -32,16 +36,16 @@ class ProductTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Football",
+                  product.category!.name.toString(),
                   style: secondaryTextStyle.copyWith(fontSize: 12),
                 ),
                 const SizedBox(height: 6),
-                Text('Predator 20.3 Firm Ground',
+                Text(product.name.toString(),
                     style: primaryTextStyle.copyWith(
                         fontSize: 16, fontWeight: semiBold)),
                 const SizedBox(height: 6),
                 Text(
-                  '\$68,47',
+                  '\$${product.price}',
                   style: priceTextStyle.copyWith(fontWeight: medium),
                 )
               ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/product_model.dart';
 
+import '../pages/product_page.dart';
 import '../theme.dart';
 
 class ProductCard extends StatelessWidget {
@@ -13,7 +14,7 @@ class ProductCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: (){
-        Navigator.pushNamed(context, '/product');
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage(product)));
       },
       child: Container(
         width: 215,
