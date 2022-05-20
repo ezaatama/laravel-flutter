@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import '../models/product_model.dart';
 
 import '../theme.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({Key? key}) : super(key: key);
+
+  final ProductModel product;
+  ProductCard(this.product);
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: (){
         Navigator.pushNamed(context, '/product');
@@ -20,8 +24,8 @@ class ProductCard extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 30),
-            Image.asset(
-              'assets/images/gambar_sepatu.png',
+            Image.network(
+              product.galleries![0].url.toString(),
               width: 215,
               height: 150,
               fit: BoxFit.cover,
@@ -32,19 +36,20 @@ class ProductCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Hiking",
+                    product.category!.name.toString(),
                     style: secondaryTextStyle.copyWith(fontSize: 12),
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    "COURT VISION 2.0",
+                    product.name.toString(),
                     style: blackTextStyle.copyWith(
                         fontSize: 18, fontWeight: semiBold),
                     overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    "\$58,67",
+                    "\$${product.price}",
                     style: purpleTextStyle.copyWith(
                         fontSize: 14, fontWeight: medium)
                   ),

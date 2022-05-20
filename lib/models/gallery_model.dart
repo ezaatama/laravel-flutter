@@ -8,8 +8,8 @@ class GalleryModel{
   });
 
   GalleryModel.fromJson(Map<String, dynamic> json){
-    id = json['id'];
-    url = json['url'];
+    id = json['id'] ?? "";
+    url = json['url'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
