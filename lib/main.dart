@@ -12,6 +12,7 @@ import '../pages/splash_page.dart';
 import '../pages/cart_page.dart';
 import '../providers/auth_provider.dart';
 import '../providers/product_provider.dart';
+import 'providers/wishlist_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AuthProvider()),
-        ChangeNotifierProvider(create: (context) => ProductProvider())
+        ChangeNotifierProvider(create: (context) => ProductProvider()),
+        ChangeNotifierProvider(create: (context) => WishlistProvider())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -36,7 +38,6 @@ class MyApp extends StatelessWidget {
           '/home': (context) => const MainPage(),
           '/detail-chat': (context) => const DetailChatPage(),
           '/edit-profile': (context) => const EditProfilePage(),
-          // '/product': (context) => ProductPage(),
           '/cart': (context) => const CartPage(),
           '/checkout': (context) => const CheckoutPage(),
           '/checkout-success': (context) => const CheckoutSuccessPage()

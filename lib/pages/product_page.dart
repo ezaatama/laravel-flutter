@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
+import '../providers/wishlist_provider.dart';
 import '../models/product_model.dart';
 import '../theme.dart';
 
@@ -13,11 +15,6 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  List images = [
-    'assets/images/gambar_sepatu.png',
-    'assets/images/gambar_sepatu.png',
-    'assets/images/gambar_sepatu.png'
-  ];
 
   List fimiliarShoes = [
     'assets/images/gambar_sepatu.png',
@@ -33,6 +30,8 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    WishlistProvider wishlistProvider = Provider.of<WishlistProvider>(context);
 
     Future<void> showSuccessDialog() async{
       return showDialog(context: context, builder: (BuildContext context) => Container(
@@ -194,10 +193,8 @@ class _ProductPageState extends State<ProductPage> {
                   )),
                   GestureDetector(
                     onTap: (){
-                      setState(() {
-                        isWishlist = !isWishlist;
-                      });
-                      if(isWishlist){
+                        wishlistProvider.setProduct(widget.product);
+                      if(wishlistProvider.isWishlist(widget.product)){
                         ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           backgroundColor: secondaryColor,
@@ -211,7 +208,7 @@ class _ProductPageState extends State<ProductPage> {
                       );
                       }
                     },
-                    child: Image.asset(isWishlist ? "assets/icons/button_wishlist_light.png" : "assets/icons/button_wishlist.png", width: 46))
+                    child: Image.asset(wishlistProvider.isWishlist(widget.product) ? "assets/icons/button_wishlist_light.png" : "assets/icons/button_wishlist.png", width: 46))
                 ],
               ),
             ),
