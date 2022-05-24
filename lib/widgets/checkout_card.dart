@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import '../models/cart_model.dart';
 import '../theme.dart';
 
 class CheckoutCard extends StatelessWidget {
-  const CheckoutCard({ Key? key }) : super(key: key);
+  final CartModel cart;
+  CheckoutCard(this.cart);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class CheckoutCard extends StatelessWidget {
             height: 60,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              image: DecorationImage(image: AssetImage("assets/images/gambar_sepatu.png"))
+              image: DecorationImage(image: NetworkImage(cart.product!.galleries![0].url.toString()))
             ),
           ),
           const SizedBox(width: 12),
@@ -31,18 +33,18 @@ class CheckoutCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Terrex Urban Low", style: primaryTextStyle.copyWith(
+                Text(cart.product!.name.toString(), style: primaryTextStyle.copyWith(
                   fontWeight: semiBold
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 2),
-                Text("\$143,98", style: priceTextStyle,)
+                Text("\$${cart.product!.price}", style: priceTextStyle,)
               ],
             ),
           ),
           const SizedBox(width: 12),
-          Text("2 Items", style: secondaryTextStyle.copyWith(fontSize: 12),)
+          Text("${cart.quantity} Items", style: secondaryTextStyle.copyWith(fontSize: 12),)
         ],
       ),
     );
