@@ -5,6 +5,7 @@ import '../providers/cart_provider.dart';
 import '../providers/wishlist_provider.dart';
 import '../models/product_model.dart';
 import '../theme.dart';
+import 'detail_chat_page.dart';
 
 class ProductPage extends StatefulWidget {
   
@@ -304,7 +305,7 @@ class _ProductPageState extends State<ProductPage> {
                 children: [
                   GestureDetector(
                     onTap: (){
-                      Navigator.pushNamed(context, '/detail-chat');
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => DetailChatPage(widget.product)));
                     },
                     child: Container(
                       width: 54,

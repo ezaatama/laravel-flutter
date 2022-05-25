@@ -16,68 +16,70 @@ class CheckoutSuccessPage extends StatelessWidget {
     }
 
     Widget _content() {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset("assets/icons/empty_cart_icon.png", width: 80),
-          const SizedBox(height: 20),
-          Text(
-            "You made a transaction",
-            style: primaryTextStyle.copyWith(fontSize: 16, fontWeight: medium),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            "Stay at home while we\n prepare your dream shoes",
-            style: secondaryTextStyle,
-            textAlign: TextAlign.center,
-          ),
-          Container(
-            width: 196,
-            height: 44,
-            margin: EdgeInsets.only(
-              top: defaultMargin
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset("assets/icons/empty_cart_icon.png", width: 80),
+            const SizedBox(height: 20),
+            Text(
+              "You made a transaction",
+              style: primaryTextStyle.copyWith(fontSize: 16, fontWeight: medium),
             ),
-            child: TextButton(
-              onPressed: (){
-                Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-              },
-              style: TextButton.styleFrom(
-                backgroundColor: primaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)
-                )
-              ),
-              child: Text(
-                "Order Other Shoes",
-                style: primaryTextStyle.copyWith(
-                  fontSize: 16,
-                  fontWeight: medium
-                ),
-              )),
-          ),
-          Container(
-            width: 196,
-            height: 44,
-            margin: EdgeInsets.only(
-              top: defaultMargin
+            const SizedBox(height: 12),
+            Text(
+              "Stay at home while we\n prepare your dream shoes",
+              style: secondaryTextStyle,
+              textAlign: TextAlign.center,
             ),
-            child: TextButton(
-              onPressed: (){},
-              style: TextButton.styleFrom(
-                backgroundColor: const Color(0xFF39374B),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)
-                )
+            Container(
+              width: 196,
+              height: 44,
+              margin: EdgeInsets.only(
+                top: defaultMargin
               ),
-              child: Text(
-                "View My Order",
-                style: primaryTextStyle.copyWith(
-                  fontSize: 16,
-                  fontWeight: medium
+              child: TextButton(
+                onPressed: (){
+                  Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+                },
+                style: TextButton.styleFrom(
+                  backgroundColor: primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)
+                  )
                 ),
-              )),
-          )
-        ],
+                child: Text(
+                  "Order Other Shoes",
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 16,
+                    fontWeight: medium
+                  ),
+                )),
+            ),
+            Container(
+              width: 196,
+              height: 44,
+              margin: EdgeInsets.only(
+                top: defaultMargin
+              ),
+              child: TextButton(
+                onPressed: (){},
+                style: TextButton.styleFrom(
+                  backgroundColor: const Color(0xFF39374B),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)
+                  )
+                ),
+                child: Text(
+                  "View My Order",
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 16,
+                    fontWeight: medium
+                  ),
+                )),
+            )
+          ],
+        ),
       );
     }
 
