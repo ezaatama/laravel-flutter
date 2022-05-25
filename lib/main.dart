@@ -1,12 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../providers/page_provider.dart';
 import '../providers/cart_provider.dart';
 import '../providers/transaction_provider.dart';
 import '../pages/checkout_success_page.dart';
 import '../pages/checkout_page.dart';
 import '../pages/edit_profile_page.dart';
-import '../pages/detail_chat_page.dart';
 import '../pages/home/main_page.dart';
 import '../pages/sign_up_page.dart';
 import '../pages/sign_in_page.dart';
@@ -34,7 +34,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ProductProvider()),
         ChangeNotifierProvider(create: (context) => WishlistProvider()),
         ChangeNotifierProvider(create: (context) => CartProvider()),
-        ChangeNotifierProvider(create: (context) => TransactionProvider())
+        ChangeNotifierProvider(create: (context) => TransactionProvider()),
+        ChangeNotifierProvider(create: (context) => PageProvider())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../providers/page_provider.dart';
 import '../../pages/home/chat_page.dart';
 import '../../pages/home/home_page.dart';
 import '../../pages/home/profile_page.dart';
@@ -13,10 +15,11 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int currentIndex = 0;
-
   @override
   Widget build(BuildContext context) {
+
+    PageProvider pageProvider = Provider.of<PageProvider>(context);
+
     Widget cartButton() {
       return FloatingActionButton(
         onPressed: () {
@@ -39,11 +42,11 @@ class _MainPageState extends State<MainPage> {
           clipBehavior: Clip.antiAlias,
           child: BottomNavigationBar(
               backgroundColor: backgroundColor4,
-              currentIndex: currentIndex,
+              currentIndex: pageProvider.currentIndex,
               onTap: (value) {
                 print(value);
                 setState(() {
-                  currentIndex = value;
+                  pageProvider.currentIndex = value;
                 });
               },
               type: BottomNavigationBarType.fixed,
@@ -54,7 +57,7 @@ class _MainPageState extends State<MainPage> {
                       child: Image.asset(
                         'assets/icons/home_icon.png',
                         width: 21,
-                        color: currentIndex == 0
+                        color: pageProvider.currentIndex == 0
                             ? primaryColor
                             : const Color(0xFF808191),
                       ),
@@ -65,7 +68,7 @@ class _MainPageState extends State<MainPage> {
                       margin: const EdgeInsets.only(top: 20, bottom: 10),
                       child: Image.asset('assets/icons/chat_icon.png',
                           width: 20,
-                          color: currentIndex == 1
+                          color: pageProvider.currentIndex == 1
                               ? primaryColor
                               : const Color(0xFF808191)),
                     ),
@@ -75,7 +78,7 @@ class _MainPageState extends State<MainPage> {
                       margin: const EdgeInsets.only(top: 20, bottom: 10),
                       child: Image.asset('assets/icons/favorite_icon.png',
                           width: 20,
-                          color: currentIndex == 2
+                          color: pageProvider.currentIndex == 2
                               ? primaryColor
                               : const Color(0xFF808191)),
                     ),
@@ -85,7 +88,7 @@ class _MainPageState extends State<MainPage> {
                       margin: const EdgeInsets.only(top: 20, bottom: 10),
                       child: Image.asset('assets/icons/profile_icon.png',
                           width: 18,
-                          color: currentIndex == 3
+                          color: pageProvider.currentIndex == 3
                               ? primaryColor
                               : const Color(0xFF808191)),
                     ),
@@ -96,7 +99,7 @@ class _MainPageState extends State<MainPage> {
     }
 
     Widget _body(){
-      switch (currentIndex){
+      switch (pageProvider.currentIndex){
         case 0:
           return const HomePage();
         case 1:
@@ -111,7 +114,7 @@ class _MainPageState extends State<MainPage> {
     }
 
     return Scaffold(
-      backgroundColor: currentIndex == 0 ? backgroundColor1 : backgroundColor3,
+      backgroundColor: pageProvider.currentIndex == 0 ? backgroundColor1 : backgroundColor3,
       floatingActionButton: cartButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: customBottomNav(),
