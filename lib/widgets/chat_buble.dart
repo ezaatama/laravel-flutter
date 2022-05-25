@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shamo/models/product_model.dart';
 import '../theme.dart';
 
 class ChatBubble extends StatelessWidget {
-  ChatBubble({Key? key, this.text = '', this.isSender = false, this.hasProduct = false})
+  ChatBubble({Key? key, this.text = '', this.isSender = false, this.product})
       : super(key: key);
 
   final String text;
   bool isSender;
-  bool hasProduct;
+  final ProductModel? product;
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +30,16 @@ class ChatBubble extends StatelessWidget {
             children: [
               ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: Image.asset("assets/images/gambar_sepatu.png",
+                  child: Image.network(product!.galleries![0].url.toString(),
                       width: 70)),
               const SizedBox(width: 8),
               Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("COURT VISION 2.0 SHOES", style: primaryTextStyle),
+                  Text(product!.name!, style: primaryTextStyle),
                   const SizedBox(height: 4),
-                  Text("\$57,15",
+                  Text("\$${product!.price}",
                       style: priceTextStyle.copyWith(fontWeight: medium))
                 ],
               ))
@@ -82,7 +83,7 @@ class ChatBubble extends StatelessWidget {
           crossAxisAlignment:
               isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
-            hasProduct ? _productPreview() : const SizedBox(),
+            product is UnintializedProductModel ? const SizedBox() : _productPreview(),
             Row(
               mainAxisAlignment:
                   isSender ? MainAxisAlignment.end : MainAxisAlignment.start,

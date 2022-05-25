@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shamo/models/message_model.dart';
 import 'package:shamo/models/product_model.dart';
+import 'package:shamo/providers/auth_provider.dart';
+import 'package:shamo/services/message_service.dart';
 import '../widgets/chat_buble.dart';
 import '../theme.dart';
 
@@ -12,8 +16,25 @@ class DetailChatPage extends StatefulWidget {
 }
 
 class _DetailChatPageState extends State<DetailChatPage> {
+  TextEditingController messageController = TextEditingController(text: '');
+
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
+    handleMessage() async {
+      await MessageService().addMessage(
+          user: authProvider.user,
+          isFromUser: true,
+          product: widget.product,
+          message: messageController.text);
+
+      setState(() {
+        widget.product = UnintializedProductModel();
+        messageController.text = '';
+      });
+    }
+
     PreferredSizeWidget _header() {
       return PreferredSize(
           preferredSize: const Size.fromHeight(70),
@@ -56,8 +77,9 @@ class _DetailChatPageState extends State<DetailChatPage> {
           children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child:
-                    Image.network(widget.product.galleries![0].url.toString(), width: 54)),
+                child: Image.network(
+                    widget.product.galleries![0].url.toString(),
+                    width: 54)),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
@@ -75,12 +97,13 @@ class _DetailChatPageState extends State<DetailChatPage> {
               ),
             ),
             GestureDetector(
-              onTap: () {
-                setState(() {
-                  widget.product = UnintializedProductModel();
-                });
-              },
-              child: Image.asset("assets/icons/icon_button_exit.png", width: 22))
+                onTap: () {
+                  setState(() {
+                    widget.product = UnintializedProductModel();
+                  });
+                },
+                child:
+                    Image.asset("assets/icons/icon_button_exit.png", width: 22))
           ],
         ),
       );
@@ -93,7 +116,9 @@ class _DetailChatPageState extends State<DetailChatPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              widget.product is UnintializedProductModel ? const SizedBox() : _productPreview(),
+              widget.product is UnintializedProductModel
+                  ? const SizedBox()
+                  : _productPreview(),
               Row(
                 children: [
                   Expanded(
@@ -106,6 +131,8 @@ class _DetailChatPageState extends State<DetailChatPage> {
                           borderRadius: BorderRadius.circular(12)),
                       child: Center(
                         child: TextFormField(
+                            controller: messageController,
+                            style: primaryTextStyle,
                             decoration: InputDecoration.collapsed(
                                 hintText: 'Type Message....',
                                 hintStyle: subtitleTextStyle)),
@@ -115,7 +142,10 @@ class _DetailChatPageState extends State<DetailChatPage> {
                   const SizedBox(
                     width: 20,
                   ),
-                  Image.asset('assets/icons/icon_send_button.png', width: 45)
+                  GestureDetector(
+                      onTap: handleMessage,
+                      child: Image.asset('assets/icons/icon_send_button.png',
+                          width: 45))
                 ],
               ),
             ],
@@ -123,23 +153,32 @@ class _DetailChatPageState extends State<DetailChatPage> {
     }
 
     Widget _content() {
-      return ListView(
-          padding: EdgeInsets.symmetric(horizontal: defaultMargin),
-          children: [
-            ChatBubble(
-                text: "Hi, This item is still available?",
-                isSender: true,
-                hasProduct: true),
-            ChatBubble(
-                text: "Good night, This item is only available in size 42 and 43",
-                isSender: false,)
-          ]);
+      return StreamBuilder<List<MessageModel>>(
+          stream: MessageService()
+              .getMessagesByUserId(userId: authProvider.user.id),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView(
+                  padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+                  children: snapshot.data!.map((MessageModel message) => ChatBubble(
+                    isSender: message.isFromUser!,
+                    text: message.message!,
+                    product: message.product,
+                  )).toList()
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          });
     }
 
     return Scaffold(
       backgroundColor: backgroundColor3,
       appBar: _header(),
       bottomNavigationBar: _chatInput(),
+      body: _content(),
     );
   }
 }

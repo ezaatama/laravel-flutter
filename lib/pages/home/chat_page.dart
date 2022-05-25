@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shamo/models/message_model.dart';
+import 'package:shamo/providers/auth_provider.dart';
+import 'package:shamo/services/message_service.dart';
 
 import '../../theme.dart';
 import '../../widgets/chat_tile.dart';
@@ -8,6 +12,8 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
     Widget _header() {
       return AppBar(
         backgroundColor: backgroundColor1,
@@ -60,16 +66,30 @@ class ChatPage extends StatelessWidget {
     }
 
     Widget _content() {
-      return Expanded(
-          child: Container(
-              width: double.infinity,
-              color: backgroundColor3,
-              child: ListView(
-                padding: EdgeInsets.symmetric(horizontal: defaultMargin),
-                children: [
-                  ChatTile()
-                ],
-              )));
+      return StreamBuilder<List<MessageModel>>(
+          stream: MessageService()
+              .getMessagesByUserId(userId: authProvider.user.id),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data!.length == 0) {
+                return _emptyChat();
+              }
+
+              return Expanded(
+                  child: Container(
+                      width: double.infinity,
+                      color: backgroundColor3,
+                      child: ListView(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: defaultMargin),
+                        children: [
+                          ChatTile(snapshot.data![snapshot.data!.length - 1])
+                        ],
+                      )));
+            } else {
+              return _emptyChat();
+            }
+          });
     }
 
     return Column(
